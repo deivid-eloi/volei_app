@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sorteio Vôlei</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="theme-color" content="#1a1f2e">
+</head>
+<body>
+
+    <!-- CONFETI CANVAS -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <!-- TELA 0: ONBOARDING -->
+    <div id="screen-onboarding" class="onboarding hidden">
+        <div class="onboarding-inner">
+            <div class="onboarding-logo">🏐</div>
+            <h1>Vôlei da Galera</h1>
+            <p class="onboarding-sub">Times equilibrados em segundos.</p>
+
+            <div class="onboarding-steps">
+                <div class="ob-step">
+                    <div class="ob-icon">👥</div>
+                    <div>
+                        <strong>Cadastre os jogadores</strong>
+                        <span>Adicione a galera e defina o nível de cada um (⭐ a ⭐⭐⭐)</span>
+                    </div>
+                </div>
+                <div class="ob-step">
+                    <div class="ob-icon">✅</div>
+                    <div>
+                        <strong>Marque quem está presente</strong>
+                        <span>Só quem veio hoje — o banco de jogadores fica salvo pra próxima</span>
+                    </div>
+                </div>
+                <div class="ob-step">
+                    <div class="ob-icon">🎲</div>
+                    <div>
+                        <strong>Sorteie!</strong>
+                        <span>O app distribui automaticamente equilibrando os níveis</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="fecharOnboarding()" class="btn-onboarding-start">
+                Começar <i class="fas fa-arrow-right"></i>
+            </button>
+            <p class="onboarding-note"><i class="fas fa-lock"></i> Tudo salvo só no seu aparelho. Sem cadastro.</p>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDIÇÃO -->
+    <div id="edit-modal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3>Editar Jogador</h3>
+            <input type="text" id="editName" placeholder="Nome do Jogador">
+            <select id="editTier">
+                <option value="C">⭐ Iniciante</option>
+                <option value="B">⭐⭐ Intermediário</option>
+                <option value="A">⭐⭐⭐ Avançado</option>
+            </select>
+            <div class="modal-actions">
+                <button onclick="fecharModal()" class="btn-modal-cancel">Cancelar</button>
+                <button onclick="salvarEdicao()" class="btn-modal-save">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA 1: GERENCIAMENTO -->
+    <div id="screen-manage" class="container">
+        <header>
+            <h1>🏐 Vôlei da Galera</h1>
+        </header>
+
+        <div class="input-group">
+            <input type="text" id="inputName" placeholder="Nome do Jogador" autocomplete="off">
+            <select id="inputTier">
+                <option value="C">Iniciante</option>
+                <option value="B" selected>Intermediário</option>
+                <option value="A">Avançado</option>
+            </select>
+            <button onclick="adicionarJogador()" class="btn-add" title="Adicionar">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+
+        <div class="game-config">
+            <div class="config-row">
+                <label for="numTeams">Times:</label>
+                <div class="num-stepper">
+                    <button onclick="stepTeams(-1)" class="btn-step">−</button>
+                    <input type="number" id="numTeams" value="2" min="2" max="4" readonly>
+                    <button onclick="stepTeams(1)" class="btn-step">+</button>
+                </div>
+            </div>
+            <div class="sort-preview" id="sortPreview">selecione jogadores</div>
+        </div>
+
+        <div class="actions">
+            <button onclick="sortear()" class="btn-sortear" id="btnSortear">
+                <i class="fas fa-shuffle"></i> SORTEAR TIMES
+            </button>
+            <div class="backup-actions">
+                <button onclick="baixarBackup()" class="btn-small">
+                    <i class="fas fa-download"></i> Backup
+                </button>
+                <label for="fileInput" class="btn-small">
+                    <i class="fas fa-upload"></i> Restaurar
+                </label>
+                <input type="file" id="fileInput" onchange="restaurarBackup(this)" style="display:none">
+            </div>
+        </div>
+
+        <div class="list-header">
+            <div class="list-counter">
+                <span id="selectedCount">0</span>/<span id="totalPlayers">0</span> selecionados
+                <div class="counter-bar-wrap">
+                    <div class="counter-bar" id="counterBar"></div>
+                </div>
+            </div>
+            <div class="list-actions">
+                <button onclick="toggleTodos(true)" class="btn-text-muted" title="Selecionar todos">
+                    <i class="fas fa-check-double"></i>
+                </button>
+                <button onclick="toggleTodos(false)" class="btn-text-muted" title="Desmarcar todos">
+                    <i class="fas fa-xmark"></i>
+                </button>
+                <div class="divider-v"></div>
+                <button onclick="alternarOrdem()" class="btn-text-muted" id="btnOrdem" title="Ordenar">
+                    <i class="fas fa-arrow-down-a-z"></i>
+                </button>
+                <div class="divider-v"></div>
+                <button onclick="limparTudo()" class="btn-text-danger" title="Limpar tudo">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="empty-state" class="empty-state hidden">
+            <div class="empty-icon">🏐</div>
+            <p>Nenhum jogador ainda!</p>
+            <span>Adicione o primeiro acima</span>
+        </div>
+
+        <ul id="playerList" class="player-list"></ul>
+    </div>
+
+    <!-- TELA 2: RESULTADO -->
+    <div id="screen-result" class="container result-screen hidden">
+        <div id="teams-container" class="teams-container"></div>
+        <div class="result-actions">
+            <button onclick="ressortear()" class="btn-ressortear">
+                <i class="fas fa-shuffle"></i> Re-sortear
+            </button>
+            <button onclick="compartilhar()" class="btn-share">
+                <i class="fas fa-share-nodes"></i> Compartilhar
+            </button>
+            <button onclick="voltar()" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Novo Jogo
+            </button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('SW registrado!'))
+                .catch(err => console.error('Erro SW:', err));
+        }
+    </script>
+</body>
+</html>
