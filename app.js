@@ -16,10 +16,10 @@ const TIER_DISPLAY = { A: '⭐⭐⭐', B: '⭐⭐', C: '⭐' };
 const TIER_TITLE   = { A: 'Avançado', B: 'Intermediário', C: 'Iniciante' };
 
 const CORES_TIMES = [
-    { nome: 'AZUL 🔵',     cor: '#2563eb' },
-    { nome: 'VERMELHO 🔴', cor: '#dc2626' },
-    { nome: 'VERDE 🟢',    cor: '#16a34a' },
-    { nome: 'AMARELO 🟡',  cor: '#d97706' },
+    { nome: 'TIME A',     cor: '#2563eb' },
+    { nome: 'TIME B', cor: '#dc2626' },
+    { nome: 'TIME C',    cor: '#16a34a' },
+    { nome: 'TIME D',  cor: '#d97706' },
 ];
 
 // ─── ESTADO ──────────────────────────────────────────────────────────────────

@@ -280,8 +280,8 @@ select { flex: 1; cursor: pointer; }
     color: var(--primary);
     border: none;
     border-radius: 9px;
-    width: 48px;
-    min-width: 48px;
+    width: 100%;
+    padding: 0.7rem;
     font-size: 18px;
     font-weight: 700;
     cursor: pointer;
@@ -567,8 +567,8 @@ select { flex: 1; cursor: pointer; }
     color: white; box-shadow: 0 8px 28px rgba(0,0,0,0.18);
     animation: cardIn 0.35s ease backwards;
 }
-.team-card:nth-child(1) { background: var(--red-team);   animation-delay: 0.05s; }
-.team-card:nth-child(2) { background: var(--blue-team);    animation-delay: 0.12s; }
+.team-card:nth-child(1) { background: var(--blue-team);   animation-delay: 0.05s; }
+.team-card:nth-child(2) { background: var(--red-team);    animation-delay: 0.12s; }
 .team-card:nth-child(3) { background: var(--green-team);  animation-delay: 0.19s; }
 .team-card:nth-child(4) { background: var(--yellow-team); animation-delay: 0.26s; }
 @keyframes cardIn {
