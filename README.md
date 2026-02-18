@@ -43,4 +43,4 @@ Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICE
 Fiz o projeto para testar o desenvolvimento usando o Claude.
 
 ---
-Feito para garantir que o jogo comece rápido e justo! 🏐
+
